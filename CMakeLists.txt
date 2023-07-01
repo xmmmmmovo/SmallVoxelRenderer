@@ -18,3 +18,6 @@ set(VOXEL_RENDERER_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 configure_file(cmake/path.hpp.in ${VOXEL_RENDERER_ROOT_DIR}/voxel-renderer/core/path.hpp @ONLY)
 
 add_subdirectory(voxel-renderer)
+
+set(SHADER_COMPILE_TARGET VoxelShaderCompile)
+add_subdirectory(shaders)
