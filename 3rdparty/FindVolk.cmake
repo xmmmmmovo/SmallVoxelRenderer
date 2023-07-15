@@ -1,0 +1,7 @@
+if (WIN32)
+    set(VOLK_STATIC_DEFINES VK_USE_PLATFORM_WIN32_KHR)
+elseif (APPLE)
+    set(VOLK_STATIC_DEFINES VK_USE_PLATFORM_MACOS_MVK)
+endif ()
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/3rdparty/volk volk)

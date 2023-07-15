@@ -1,6 +1,8 @@
-#include <iostream>
+#include "application/renderer.hpp"
 
 int main() {
-  std::cout << "Hello, World!" << std::endl;
-  return 0;
+    voxel::Renderer renderer;
+    renderer.init();
+    renderer.start();
+    return 0;
 }
