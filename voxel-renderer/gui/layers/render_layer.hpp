@@ -12,9 +12,14 @@
 namespace voxel {
 
 class RenderLayer final : private Noncopyable, public RenderLoopObject {
+private:
+    GLFWwindow const *_window = nullptr;
+
 public:
-    void init(GLFWwindow *window) noexcept override {}
+    void init(GLFWwindow const *window) noexcept override { _window = window; }
+
     void update() noexcept override {}
+
     ~RenderLayer() noexcept override = default;
 };
 

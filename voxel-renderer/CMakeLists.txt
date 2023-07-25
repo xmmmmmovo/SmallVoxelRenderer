@@ -21,7 +21,8 @@ target_include_directories(${TARGET_NAME} PRIVATE ${VOXEL_RENDERER_ROOT_DIR}/vox
 
 target_precompile_headers(${TARGET_NAME} PRIVATE ${VOXEL_RENDERER_ROOT_DIR}/precompile/pch.hpp)
 
-add_dependencies(${TARGET_NAME} ${SHADER_COMPILE_TARGET})
+add_dependencies(${TARGET_NAME} "${SHADER_COMPILE_TARGET}_VK")
+add_dependencies(${TARGET_NAME} "${SHADER_COMPILE_TARGET}_GL")
 
 find_package(Vulkan REQUIRED)
 find_package(Threads REQUIRED)
@@ -32,8 +33,10 @@ include(${VOXEL_RENDERER_ROOT_DIR}/3rdparty/FindImgui.cmake)
 include(${VOXEL_RENDERER_ROOT_DIR}/3rdparty/FindSpdlog.cmake)
 include(${VOXEL_RENDERER_ROOT_DIR}/3rdparty/FindVMA.cmake)
 include(${VOXEL_RENDERER_ROOT_DIR}/3rdparty/FindVolk.cmake)
+include(${VOXEL_RENDERER_ROOT_DIR}/3rdparty/FindOpenGL.cmake)
+include(${VOXEL_RENDERER_ROOT_DIR}/3rdparty/FindMagicEnum.cmake)
 
-target_link_libraries(${TARGET_NAME} PRIVATE GPUOpen::VulkanMemoryAllocator volk_headers)
-target_link_libraries(${TARGET_NAME} PUBLIC Threads::Threads)
-target_link_libraries(${TARGET_NAME} PUBLIC glfw stb glm Vulkan::Vulkan)
-target_link_libraries(${TARGET_NAME} PUBLIC imgui spdlog)
+target_link_libraries(${TARGET_NAME} PRIVATE GPUOpen::VulkanMemoryAllocator volk_headers Vulkan::Vulkan)
+target_link_libraries(${TARGET_NAME} PRIVATE Threads::Threads magic_enum::magic_enum spdlog)
+target_link_libraries(${TARGET_NAME} PRIVATE glfw stb imgui glm)
+target_link_libraries(${TARGET_NAME} PRIVATE ${OGLLIB} glad)

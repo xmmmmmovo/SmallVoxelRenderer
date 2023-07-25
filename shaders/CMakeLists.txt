@@ -1,18 +1,33 @@
 set(TARGET_NAME ${SHADER_COMPILE_TARGET})
 
-file(GLOB_RECURSE SHADER_FILES CONFIGURE_DEPENDS
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.vert"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.frag"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.comp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.geom"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.tesc"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.tese"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.mesh"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.task"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.rgen"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.rchit"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.rmiss"
-        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/*.rcall"
+file(GLOB_RECURSE VULKAN_SHADER_FILES CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.vert"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.frag"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.comp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.geom"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.tesc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.tese"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.mesh"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.task"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.rgen"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.rchit"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.rmiss"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/vulkan/*.rcall"
+        )
+
+file(GLOB_RECURSE OPENGL_SHADER_FILES CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.vert"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.frag"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.comp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.geom"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.tesc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.tese"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.mesh"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.task"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.rgen"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.rchit"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.rmiss"
+        "${CMAKE_CURRENT_SOURCE_DIR}/glsl/opengl/*.rcall"
         )
 
 set(SHADER_INCLUDE_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -31,10 +46,24 @@ set(glslangValidator_executable ${Vulkan_GLSLANG_VALIDATOR_EXECUTABLE})
 
 include(${PROJECT_SOURCE_DIR}/cmake/ShaderCompile.cmake)
 compile_shader(
-        "${SHADER_FILES}"
-        "${TARGET_NAME}"
+        "${VULKAN_SHADER_FILES}"
+        "${TARGET_NAME}_VK"
         "${SHADER_INCLUDE_FOLDER}"
         "${GENERATED_SHADER_FOLDER}"
-        "${glslangValidator_executable}")
+        "${glslangValidator_executable}"
+        "vk"
+        "-V100"
+)
 
-set_target_properties("${TARGET_NAME}" PROPERTIES FOLDER "RendererShader")
+compile_shader(
+        "${OPENGL_SHADER_FILES}"
+        "${TARGET_NAME}_GL"
+        "${SHADER_INCLUDE_FOLDER}"
+        "${GENERATED_SHADER_FOLDER}"
+        "${glslangValidator_executable}"
+        "gl"
+        "-G"
+)
+
+set_target_properties("${TARGET_NAME}_VK" PROPERTIES FOLDER "VKRendererShader")
+set_target_properties("${TARGET_NAME}_GL" PROPERTIES FOLDER "GLRendererShader")

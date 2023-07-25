@@ -11,7 +11,7 @@ namespace voxel {
 
 class RenderLoopObject {
 public:
-    virtual void init(GLFWwindow *window) noexcept = 0;
+    virtual void init(GLFWwindow const *window) noexcept = 0;
     virtual void update() noexcept                 = 0;
     virtual ~RenderLoopObject() noexcept           = default;
 };

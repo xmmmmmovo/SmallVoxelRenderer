@@ -10,14 +10,9 @@
 
 #include "core/noncopyable.hpp"
 #include "core/object.hpp"
+#include "imgui_state.hpp"
 
 namespace voxel {
-
-struct ImGuiState {
-    ImGuiContext *context;
-    ImGuiIO      *io;
-    ImGuiStyle   *style;
-};
 
 /**
  * @brief imgui渲染层
@@ -27,23 +22,11 @@ private:
     ImGuiState _imgui_state;
 
 public:
-    void init(GLFWwindow *window) noexcept override {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        _imgui_state.context = ImGui::GetCurrentContext();
-        _imgui_state.io      = &ImGui::GetIO();
-        (void) _imgui_state.io;
-        _imgui_state.style = &ImGui::GetStyle();
-        ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-    }
+    void init(GLFWwindow const *window) noexcept override {}
 
     void update() noexcept override {}
 
-    ~ImGuiLayer() noexcept override {
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-    };
+    ~ImGuiLayer() noexcept override{};
 
     [[nodiscard]] ImGuiState const &getImGuiState() noexcept {
         return _imgui_state;
