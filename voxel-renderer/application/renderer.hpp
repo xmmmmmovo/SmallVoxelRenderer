@@ -15,9 +15,6 @@ namespace voxel {
 
 class Renderer {
 private:
-    ViewHolder _view_holder;
-
-
     RenderLayer _render_layer;
     ImGuiLayer  _imgui_layer;
     InputSystem _input_system;

@@ -5,6 +5,7 @@
 #ifndef VOXEL_RENDERER_GRAPHICS_VIEW_HOLDER_HPP
 #define VOXEL_RENDERER_GRAPHICS_VIEW_HOLDER_HPP
 
+#include "graphics/adapters/graphics_adapter.hpp"
 #include <string>
 
 #include <volk.h>
@@ -23,11 +24,10 @@ private:
     GLFWwindow *_window = nullptr;
 
 public:
-    void init() {
+    void init(IGraphicsAdapter const *adapter) {
         spdlog::info("Init window");
         glfwInit();
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        adapter->init();
         _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
                                    WINDOW_TITLE.data(), nullptr, nullptr);
     }
