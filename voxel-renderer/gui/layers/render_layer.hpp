@@ -7,16 +7,13 @@
 
 
 #include "core/noncopyable.hpp"
-#include "core/object.hpp"
+#include "gui/layers/layer.hpp"
 
 namespace voxel {
 
-class RenderLayer final : private Noncopyable, public RenderLoopObject {
-private:
-    GLFWwindow const *_window = nullptr;
-
+class RenderLayer final : private Noncopyable, public ILayer {
 public:
-    void init(GLFWwindow const *window) noexcept override { _window = window; }
+    void init() noexcept override {}
 
     void update() noexcept override {}
 

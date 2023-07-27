@@ -11,11 +11,12 @@
 namespace voxel {
 
 struct ImGuiState final {
-    ImGuiContext *context;
-    ImGuiIO      *io;
-    ImGuiStyle   *style;
+    ImGuiIO    *io;
+    ImGuiStyle *style;
+
+    bool show_demo_window = true;
 };
 
-}
+}// namespace voxel
 
 #endif//VOXEL_RENDERER_GUI_LAYERS_IMGUI_STATE_HPP

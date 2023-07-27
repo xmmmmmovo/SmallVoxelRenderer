@@ -6,10 +6,10 @@
 #define VOXEL_RENDERER_GRAPHICS_IMGUI_LAYER_HPP
 
 #include "backends/imgui_impl_glfw.h"
+#include "gui/layers/layer.hpp"
 #include "imgui.h"
 
 #include "core/noncopyable.hpp"
-#include "core/object.hpp"
 #include "imgui_state.hpp"
 
 namespace voxel {
@@ -17,16 +17,21 @@ namespace voxel {
 /**
  * @brief imgui渲染层
  */
-class ImGuiLayer final : private Noncopyable, public RenderLoopObject {
+class ImGuiLayer final : private Noncopyable, public ILayer {
 private:
     ImGuiState _imgui_state;
 
 public:
-    void init(GLFWwindow const *window) noexcept override {}
+    void init() noexcept override {
+        _imgui_state.io    = &ImGui::GetIO();
+        _imgui_state.style = &ImGui::GetStyle();
+    }
 
-    void update() noexcept override {}
+    void update() noexcept override {
+        ImGui::ShowDemoWindow(&_imgui_state.show_demo_window);
+    }
 
-    ~ImGuiLayer() noexcept override{};
+    ~ImGuiLayer() noexcept override = default;
 
     [[nodiscard]] ImGuiState const &getImGuiState() noexcept {
         return _imgui_state;

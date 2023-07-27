@@ -115,4 +115,6 @@
 #include <stdfloat>
 #endif
 
+#define GLFW_INCLUDE_NONE
+
 #endif /* PRECOMPILE_PCH */

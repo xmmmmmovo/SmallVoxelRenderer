@@ -37,6 +37,8 @@ public:
         delta_time       = 0.0f;
         time_scale       = 1.0f;
         time_since_start = 0.0f;
+
+        unreset = false;
     }
 
     void update() {

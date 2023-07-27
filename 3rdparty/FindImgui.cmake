@@ -12,12 +12,15 @@ if (imgui_ADDED)
             ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
             ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.h
             ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.cpp
-            ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.h)
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.h
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.h
+            )
 
     add_library(imgui STATIC ${imgui_sources} ${imgui_impl})
 
     target_include_directories(imgui PUBLIC $<BUILD_INTERFACE:${imgui_SOURCE_DIR}>)
-    target_link_libraries(imgui PUBLIC glfw Vulkan::Vulkan)
+    target_link_libraries(imgui PUBLIC glfw Vulkan::Vulkan ${OGLLIB})
 
     set_target_properties(imgui PROPERTIES LINKER_LANGUAGE CXX)
     set_target_properties(imgui PROPERTIES FOLDER 3rdparty)

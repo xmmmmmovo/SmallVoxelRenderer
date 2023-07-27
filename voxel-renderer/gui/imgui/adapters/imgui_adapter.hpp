@@ -11,9 +11,11 @@ namespace voxel {
 
 class IImGuiAdapter {
 public:
-    virtual void init(GLFWwindow const *window) noexcept = 0;
+    virtual void init(GLFWwindow *window) noexcept = 0;
 
-    virtual void update() noexcept = 0;
+    virtual void newFrame() noexcept = 0;
+
+    virtual void render() noexcept = 0;
 
     virtual ~IImGuiAdapter() noexcept = default;
 };
