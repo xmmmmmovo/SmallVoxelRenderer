@@ -12,17 +12,17 @@ namespace voxel {
  * @details 这个类适用于接口定义，仅能用私有继承(private inheritance)
  * 继承自此类便会自动取消构造函数和复制构造函数，用于定义接口
  */
-class Noncopyable {
+class NonCopyable {
 protected:
-    Noncopyable()          = default;
-    virtual ~Noncopyable() = default;
+    NonCopyable()         = default;
+    virtual ~NonCopyable() = default;
 
 public:
-    Noncopyable(const Noncopyable &)            = delete;
-    Noncopyable &operator=(const Noncopyable &) = delete;
+    NonCopyable(const NonCopyable &)            = delete;
+    NonCopyable &operator=(const NonCopyable &) = delete;
 
-    Noncopyable(Noncopyable &&other) noexcept            = default;
-    Noncopyable &operator=(Noncopyable &&other) noexcept = default;
+    NonCopyable(NonCopyable &&other) noexcept            = default;
+    NonCopyable &operator=(NonCopyable &&other) noexcept = default;
 };
 
 }// namespace voxel

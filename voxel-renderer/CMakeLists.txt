@@ -17,7 +17,10 @@ add_executable(
 
 set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 20 OUTPUT_NAME ${TARGET_NAME})
 
-target_include_directories(${TARGET_NAME} PRIVATE ${VOXEL_RENDERER_ROOT_DIR}/voxel-renderer)
+target_include_directories(${TARGET_NAME} PUBLIC ${VOXEL_RENDERER_ROOT_DIR}/voxel-renderer)
+target_include_directories(
+        ${TARGET_NAME}
+        PUBLIC $<BUILD_INTERFACE:${VOXEL_RENDERER_ROOT_DIR}/shaders/generated/cpp>)
 
 target_precompile_headers(${TARGET_NAME} PRIVATE ${VOXEL_RENDERER_ROOT_DIR}/precompile/pch.hpp)
 

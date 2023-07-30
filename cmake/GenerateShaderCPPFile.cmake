@@ -9,14 +9,13 @@
 ####################################################################################################
 
 function(embed_resource resource_file_name source_file_name variable_name)
-
-    if(EXISTS "${source_file_name}")
-        if("${source_file_name}" IS_NEWER_THAN "${resource_file_name}")
+    if (EXISTS "${source_file_name}")
+        if ("${source_file_name}" IS_NEWER_THAN "${resource_file_name}")
             return()
-        endif()
-    endif()
+        endif ()
+    endif ()
 
-    if(EXISTS "${resource_file_name}")
+    if (EXISTS "${resource_file_name}")
         file(READ "${resource_file_name}" hex_content HEX)
 
         string(REPEAT "[0-9a-f]" 32 pattern)
@@ -32,14 +31,14 @@ function(embed_resource resource_file_name source_file_name variable_name)
         set(source "/**\n * @file ${file_name}\n * @brief Auto generated file.\n */\n#include <vector>\n${array_definition}\n")
 
         file(WRITE "${source_file_name}" "${source}")
-    else()
+    else ()
         message("ERROR: ${resource_file_name} doesn't exist")
         return()
-    endif()
+    endif ()
 
 endfunction()
 
 # let's use it as a script
-if(EXISTS "${PATH}")
+if (EXISTS "${PATH}")
     embed_resource("${PATH}" "${HEADER}" "${GLOBAL}")
-endif()
+endif ()

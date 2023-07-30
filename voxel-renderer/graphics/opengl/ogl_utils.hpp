@@ -1,0 +1,14 @@
+//
+// Created by xmmmmmovo on 2023/7/28.
+//
+
+#ifndef VOXEL_RENDERER_GRAPHICS_OPENGL_OGL_UTILS_HPP
+#define VOXEL_RENDERER_GRAPHICS_OPENGL_OGL_UTILS_HPP
+
+namespace voxel {
+
+
+
+}
+
+#endif//VOXEL_RENDERER_GRAPHICS_OPENGL_OGL_UTILS_HPP

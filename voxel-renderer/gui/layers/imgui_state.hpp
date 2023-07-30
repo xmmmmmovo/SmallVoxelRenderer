@@ -11,10 +11,10 @@
 namespace voxel {
 
 struct ImGuiState final {
-    ImGuiIO    *io;
-    ImGuiStyle *style;
+    ImGuiIO    *io{nullptr};
+    ImGuiStyle *style{nullptr};
 
-    bool show_demo_window = true;
+    bool show_demo_window{true};
 };
 
 }// namespace voxel

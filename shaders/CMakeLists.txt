@@ -65,5 +65,5 @@ compile_shader(
         "-G"
 )
 
-set_target_properties("${TARGET_NAME}_VK" PROPERTIES FOLDER "VKRendererShader")
-set_target_properties("${TARGET_NAME}_GL" PROPERTIES FOLDER "GLRendererShader")
+set_target_properties("${TARGET_NAME}_VK" PROPERTIES FOLDER "RendererShader")
+set_target_properties("${TARGET_NAME}_GL" PROPERTIES FOLDER "RendererShader")

@@ -17,7 +17,7 @@ namespace voxel {
 /**
  * @brief imgui渲染层
  */
-class ImGuiLayer final : private Noncopyable, public ILayer {
+class ImGuiLayer final : private NonCopyable, public ILayer {
 private:
     ImGuiState _imgui_state;
 
@@ -29,6 +29,7 @@ public:
 
     void update() noexcept override {
         ImGui::ShowDemoWindow(&_imgui_state.show_demo_window);
+        ImGui::ShowMetricsWindow(&_imgui_state.show_demo_window);
     }
 
     ~ImGuiLayer() noexcept override = default;
