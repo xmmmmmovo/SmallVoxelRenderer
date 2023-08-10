@@ -13,19 +13,29 @@
 namespace voxel {
 
 struct OGLRenderPassDescription final {
-    std::shared_ptr<OGLShader> _vert_shader{nullptr};
-    std::shared_ptr<OGLShader> _frag_shader{nullptr};
-    OGLShaderProgram           _shader_program{};
-
     std::unique_ptr<OGLFramebuffer> _framebuffer{nullptr};
+    glm::vec4                       _clear_color{0.8f, 0.8f, 0.8f, 1.0f};
 };
 
 class OGLRenderPass final {
     OGLRenderPassDescription _description{};
 
+private:
+    void clear() const {
+        glClearColor(_description._clear_color.r, _description._clear_color.g,
+                     _description._clear_color.b, _description._clear_color.a);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
 public:
     explicit OGLRenderPass(OGLRenderPassDescription description)
         : _description(std::move(description)){};
+
+    void use() noexcept {
+        if (_description._framebuffer != nullptr) {}
+        clear();
+    }
+
     ~OGLRenderPass() noexcept = default;
 };
 

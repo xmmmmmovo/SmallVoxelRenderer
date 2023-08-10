@@ -15,8 +15,6 @@ public:
     virtual void initForWindow() const noexcept                = 0;
     virtual void initForApi(GLFWwindow *window) const noexcept = 0;
 
-    virtual void update() noexcept = 0;
-
     virtual void resize(int width, int height) const noexcept = 0;
     virtual void swapBuffers() const noexcept                 = 0;
 

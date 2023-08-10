@@ -96,7 +96,7 @@ private:
     GLuint _program_id = 0;
 
 public:
-    OGLShaderProgram() noexcept = default;
+    OGLShaderProgram() noexcept { _program_id = glCreateProgram(); };
     ~OGLShaderProgram() noexcept override { glDeleteProgram(_program_id); }
 
     OGLShaderProgram(OGLShaderProgram &&other) noexcept {
@@ -112,13 +112,11 @@ public:
         return *this;
     }
 
-    void attach(OGLShader const &shader) noexcept {
-        if (_program_id == 0) { _program_id = glCreateProgram(); }
+    void attach(OGLShader const &shader) const noexcept {
         shader.attach(_program_id);
     }
 
-    void detach(OGLShader const &shader) noexcept {
-        if (_program_id == 0) { _program_id = glCreateProgram(); }
+    void detach(OGLShader const &shader) const noexcept {
         shader.detach(_program_id);
     }
 
@@ -128,11 +126,14 @@ public:
     }
 
     void use() const noexcept { glUseProgram(_program_id); }
+    
+    void unUse() const noexcept { glUseProgram(0); }
 
     [[nodiscard]] GLuint getProgramId() const noexcept { return _program_id; }
 
     template<typename T>
-    void setUniform(std::string_view const &name, T value) const noexcept {
+    void setUniform(std::string_view const &name,
+                    T const                &value) const noexcept {
         if constexpr (std::is_same_v<T, float>) {
             glUniform1f(glGetUniformLocation(_program_id, name.data()), value);
         } else if constexpr (std::is_same_v<T, int>) {
@@ -143,6 +144,8 @@ public:
         } else if constexpr (std::is_same_v<T, glm::mat4>) {
             glUniformMatrix4fv(glGetUniformLocation(_program_id, name.data()),
                                1, GL_FALSE, &value[0][0]);
+        } else {
+            spdlog::error("Unsupported uniform type");
         }
     }
 };

@@ -8,8 +8,8 @@
 #include "core/clock.hpp"
 #include "graphics/adapters/ogl_adapter.hpp"
 #include "gui/imgui/adapters/imgui_opengl_adapter.hpp"
-#include "gui/layers/imgui_layer.hpp"
-#include "gui/layers/render_layer.hpp"
+#include "gui/imgui/imgui_layer.hpp"
+#include "gui/render_layer.hpp"
 #include "gui/view_holder.hpp"
 #include "input/input_system.hpp"
 
@@ -18,13 +18,16 @@
 
 namespace voxel {
 
+constexpr std::string_view WINDOW_TITLE  = "Voxel VoxelRenderer";
+constexpr std::int32_t     WINDOW_WIDTH  = 1366;
+constexpr std::int32_t     WINDOW_HEIGHT = 768;
+
 class VoxelRenderer final {
 private:
     ViewHolder _view_holder;
 
     RenderLayer _render_layer;
     ImGuiLayer  _imgui_layer;
-    InputSystem _input_system;
 
     Clock _clock;
 
@@ -35,8 +38,14 @@ public:
                 std::make_unique<OGLAdapter>();
         std::unique_ptr<OGLImguiAdapter> imgui_adapter =
                 std::make_unique<OGLImguiAdapter>();
-        _view_holder.init(std::move(ogl_adapter), std::move(imgui_adapter));
-        _view_holder.setVsync(true);
+        _view_holder.init({
+                .gl_adapter    = std::move(ogl_adapter),
+                .imgui_adapter = std::move(imgui_adapter),
+                .is_vsync      = true,
+                .window_title  = WINDOW_TITLE,
+                .window_width  = WINDOW_WIDTH,
+                .window_height = WINDOW_HEIGHT,
+        });
 
         _imgui_layer.init();
         _render_layer.init();
@@ -44,8 +53,8 @@ public:
 
     void update() noexcept {
         _clock.update();
-        _render_layer.update();
-        _imgui_layer.update();
+        _render_layer.update(_clock.getDeltaTime());
+        _imgui_layer.update(_clock.getDeltaTime());
     }
 
     void start() noexcept {

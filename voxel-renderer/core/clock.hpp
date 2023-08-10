@@ -20,7 +20,7 @@ private:
     float time_scale{};
 
     float time_since_start{};
-    bool  unreset{false};
+    bool  unreset{true};
 
 public:
     [[nodiscard]] float getDeltaTime() const { return delta_time; }

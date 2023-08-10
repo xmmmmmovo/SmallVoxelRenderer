@@ -37,12 +37,9 @@ public:
             spdlog::error("Failed to initialize GLAD");
             abort();
         }
-    }
 
-    void update() noexcept override {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT |
-                GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
     }
 
     void resize(int width, int height) const noexcept override {

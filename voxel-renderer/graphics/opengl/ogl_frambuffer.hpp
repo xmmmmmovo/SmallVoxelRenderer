@@ -9,35 +9,73 @@
 #include <utility>
 #include <vector>
 
+#include "ogl_render_buffer.hpp"
 #include "ogl_texture.hpp"
 
 namespace voxel {
 
 struct OGLFramebufferDescription final {
-    int  width{0};
-    int  height{0};
-    int  samples{1};
-    int  mip_levels{1};
-    int  attachment_count{0};
-    int  color_attachment_count{0};
-    int  depth_stencil_attachment_count{0};
-    bool swapchain_target{false};
+    int width{0};
+    int height{0};
 
-    std::vector<OGLTexture>   color_attachments{};
-    std::optional<OGLTexture> depth_stencil_attachment{std::nullopt};
+    std::vector<OGLTexture>        color_attachments{};
+    std::optional<OGLRenderBuffer> depth_stencil_attachment{};
 };
 
 class OGLFramebuffer final {
 private:
     OGLFramebufferDescription _description;
 
+    GLuint _framebuffer{0};
+
+    void create_framebuffer() {
+        if (_framebuffer != 0) {
+            glDeleteFramebuffers(1, &_framebuffer);
+            _framebuffer = 0;
+        }
+        glGenFramebuffers(1, &_framebuffer);
+        bind();
+        std::size_t i = 0;
+        for (auto &color_attachment : _description.color_attachments) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i++,
+                                   GL_TEXTURE_2D,
+                                   color_attachment.getTextureID(), 0);
+        }
+        if (_description.depth_stencil_attachment.has_value()) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                   GL_TEXTURE_2D,
+                                   _description.depth_stencil_attachment.value()
+                                           .getRenderBufferID(),
+                                   0);
+        }
+        unbind();
+    }
+
 public:
     explicit OGLFramebuffer(OGLFramebufferDescription description)
-        : _description(std::move(description)){
-                  
+        : _description(std::move(description)) {
+        create_framebuffer();
+    };
 
-          };
-    ~OGLFramebuffer() noexcept = default;
+    void bind() const noexcept {
+        glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    }
+
+    void unbind() const noexcept { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+
+    void resize(int width, int height) {
+        _description.width  = width;
+        _description.height = height;
+        create_framebuffer();
+    }
+
+    [[nodiscard]] GLuint getFramebufferID() const noexcept {
+        return _framebuffer;
+    }
+
+    ~OGLFramebuffer() noexcept {
+        if (_framebuffer != 0) { glDeleteFramebuffers(1, &_framebuffer); }
+    };
 };
 
 }// namespace voxel

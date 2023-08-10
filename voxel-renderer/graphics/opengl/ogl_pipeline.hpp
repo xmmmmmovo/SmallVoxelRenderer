@@ -8,21 +8,14 @@
 
 #include "ogl_frambuffer.hpp"
 #include "ogl_renderpass.hpp"
+#include "ogl_vertex_array.hpp"
 
 #include <algorithm>
 
 namespace voxel {
 
 struct OGLPipelineDescription final {
-    std::unique_ptr<OGLRenderPass> _render_passes{nullptr};
-
-    std::shared_ptr<OGLShader> _vert_shader{nullptr};
-    std::shared_ptr<OGLShader> _frag_shader{nullptr};
-    OGLShaderProgram           _shader_program{};
-
-
-
-    glm::vec4 _clear_color{0.0f, 0.0f, 0.0f, 1.0f};
+    OGLShaderProgram _shader_program{};
 };
 
 class OGLPipeline final {
@@ -30,23 +23,16 @@ private:
     OGLPipelineDescription _description{};
 
 private:
-    void clear() const {
-        glClearColor(_description._clear_color.r, _description._clear_color.g,
-                     _description._clear_color.b, _description._clear_color.a);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-
 public:
     explicit OGLPipeline(OGLPipelineDescription description)
-        : _description(std::move(description)) {
-        assert((_description._render_passes != nullptr) && "render_passes is "
-                                                           "nullptr");
-    };
+        : _description(std::move(description)){};
     ~OGLPipeline() noexcept = default;
 
-    void update() noexcept {
-        // render loop
-        clear();
+    void use() const noexcept { _description._shader_program.use(); }
+
+    template<typename T>
+    void setUniform(const std::string_view &name, const T &value) {
+        _description._shader_program.setUniform(name, value);
     }
 };
 

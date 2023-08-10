@@ -2,14 +2,16 @@
 
 layout(location = 0) in vec3 aPos;
 
-layout(location = 0) uniform mat4 model;
-
 layout(std140, binding = 0) uniform Matrices {
 	mat4 view;
 	mat4 projection;
 	mat4 viewProjection;
 };
 
+layout(std140, binding = 1) uniform Model {
+	mat4 model;
+};
+
 void main() {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = viewProjection * model * vec4(aPos.x, aPos.y, aPos.z, 1.0f);
 }
