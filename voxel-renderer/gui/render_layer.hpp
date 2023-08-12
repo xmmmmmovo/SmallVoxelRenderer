@@ -6,13 +6,15 @@
 #define VOXEL_RENDERER_GRAPHICS_RENDER_LAYER_HPP
 
 #include "core/noncopyable.hpp"
-#include "graphics/renderer/cpu_splatting_renderer.hpp"
-#include "graphics/renderer/default_renderer.hpp"
-#include "gui/interface/layer.hpp"
+#include "graphics/common/common_vertex_buffer.hpp"
+#include "gui/imgui/imgui_ctx.hpp"
+#include "gui/renderer/cpu_splatting_renderer.hpp"
+#include "gui/renderer/default_renderer.hpp"
+#include "render_layer_ctx.hpp"
 
 namespace voxel {
 
-class RenderLayer final : private NonCopyable, public ILayer {
+class RenderLayer final : private NonCopyable {
 private:
     MatricesStruct                             _matrices{};
     std::unique_ptr<OGLBuffer<MatricesStruct>> _matrices_buffer{nullptr};
@@ -30,6 +32,9 @@ private:
 
     DefaultRenderer      _dft_renderer{};
     CPUSplattingRenderer _cpu_splatting_renderer{};
+
+    ImGuiLayerContext const            *_imgui_ctx{nullptr};
+    std::unique_ptr<RenderLayerContext> _render_ctx{nullptr};
 
 private:
     void processInput(float delta_t) {
@@ -92,9 +97,12 @@ private:
     }
 
 public:
-    void init() noexcept override {
-        //        _dft_renderer.init();
-        _cpu_splatting_renderer.init();
+    void init(ImGuiLayerContext const *ctx) noexcept {
+        _imgui_ctx  = ctx;
+        _render_ctx = std::make_unique<RenderLayerContext>();
+
+        _dft_renderer.init(_render_ctx.get());
+        _cpu_splatting_renderer.init(_render_ctx.get());
 
         _matrices_buffer = std::make_unique<OGLBuffer<MatricesStruct>>(
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
@@ -115,11 +123,15 @@ public:
         _camera_struct.ray_steps.z = 1.0f / DFT_Z_DIM;
     }
 
-    void update(float delta_t) noexcept override {
+    void update(float delta_t) noexcept {
         processInput(delta_t);
         updateUBO();
-        //        _dft_renderer.update(delta_t);
-        _cpu_splatting_renderer.update(delta_t);
+
+        if (_imgui_ctx->current_renderer == RendererType::DEFAULT) {
+            _dft_renderer.update(delta_t);
+        } else {
+            _cpu_splatting_renderer.update(delta_t);
+        }
     }
 
     ~RenderLayer() noexcept override = default;

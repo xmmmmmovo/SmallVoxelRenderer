@@ -1,10 +1,13 @@
 #version 460
 
-layout(location = 0) out vec2 texCoord;
+layout (location = 0) in vec2 vertex;
+
+layout (location = 0) out vec2 texCoord;
 
 void main()
 {
-    vec2 position = vec2(gl_VertexID % 2, gl_VertexID / 2) * 4.0 - 1;
-    texCoord = (position + 1) * 0.5;
-    gl_Position = vec4(position, 0, 1);
+    //get clipspace position by using the object space vertex position
+    gl_Position = vec4(vertex.xy * 2.0 - 1.0, 0.0f, 1.0f);
+    //store the object space vertex position as texture coordinates
+    texCoord = vertex;
 }

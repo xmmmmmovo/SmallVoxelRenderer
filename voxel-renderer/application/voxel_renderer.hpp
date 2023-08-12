@@ -48,7 +48,7 @@ public:
         });
 
         _imgui_layer.init();
-        _render_layer.init();
+        _render_layer.init(_imgui_layer.getImGuiCtx());
     }
 
     void update() noexcept {

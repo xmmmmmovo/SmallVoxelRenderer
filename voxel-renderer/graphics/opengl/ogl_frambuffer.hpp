@@ -42,11 +42,11 @@ private:
                                    color_attachment.getTextureID(), 0);
         }
         if (_description.depth_stencil_attachment.has_value()) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
-                                   GL_TEXTURE_2D,
-                                   _description.depth_stencil_attachment.value()
-                                           .getRenderBufferID(),
-                                   0);
+            glFramebufferRenderbuffer(
+                    GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                    GL_RENDERBUFFER,
+                    _description.depth_stencil_attachment.value()
+                            .getRenderBufferID());
         }
         unbind();
     }
@@ -71,6 +71,16 @@ public:
 
     [[nodiscard]] GLuint getFramebufferID() const noexcept {
         return _framebuffer;
+    }
+
+    [[nodiscard]] OGLTexture const &
+    getColorAttachment(int index) const noexcept {
+        return _description.color_attachments[index];
+    }
+
+    [[nodiscard]] std::optional<OGLRenderBuffer> const &
+    getDepthStencilAttachment() const noexcept {
+        return _description.depth_stencil_attachment;
     }
 
     ~OGLFramebuffer() noexcept {

@@ -8,6 +8,7 @@
 #include <glad/glad.h>
 
 #include <algorithm>
+#include <glm/glm.hpp>
 #include <vector>
 
 #include "core/meta/is_specialization.hpp"

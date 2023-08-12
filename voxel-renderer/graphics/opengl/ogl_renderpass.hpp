@@ -32,8 +32,26 @@ public:
         : _description(std::move(description)){};
 
     void use() noexcept {
-        if (_description._framebuffer != nullptr) {}
+        if (_description._framebuffer != nullptr) {
+            _description._framebuffer->bind();
+        }
         clear();
+    }
+
+    void unuse() const noexcept {
+        if (_description._framebuffer != nullptr) {
+            _description._framebuffer->unbind();
+        }
+    }
+
+    [[nodiscard]] OGLTexture const &
+    getColorAttachment(int index) const noexcept {
+        return _description._framebuffer->getColorAttachment(index);
+    }
+
+    [[nodiscard]] std::optional<OGLRenderBuffer> const &
+    getDepthStencilAttachment() const noexcept {
+        return _description._framebuffer->getDepthStencilAttachment();
     }
 
     ~OGLRenderPass() noexcept = default;
