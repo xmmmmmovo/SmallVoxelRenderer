@@ -8,9 +8,14 @@
 #include "core/noncopyable.hpp"
 #include "graphics/common/common_vertex_buffer.hpp"
 #include "gui/imgui/imgui_ctx.hpp"
-#include "gui/renderer/cpu_splatting_renderer.hpp"
 #include "gui/renderer/default_renderer.hpp"
+#include "gui/renderer/marcher_renderer.hpp"
+#include "gui/renderer/point_splatting_renderer.hpp"
 #include "render_layer_ctx.hpp"
+
+#include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace voxel {
 
@@ -25,13 +30,17 @@ private:
     CameraStruct                             _camera_struct{};
     std::unique_ptr<OGLBuffer<CameraStruct>> _camera_buffer{nullptr};
 
+    SplatStruct                             _splat_struct{};
+    std::unique_ptr<OGLBuffer<SplatStruct>> _splat_buffer{nullptr};
+
     EulerCamera _camera{};
 
     bool  _first_mouse{true};
     float _mouse_last_x{0.0f}, _mouse_last_y{0.0f};
 
-    DefaultRenderer      _dft_renderer{};
-    CPUSplattingRenderer _cpu_splatting_renderer{};
+    DefaultRenderer        _dft_renderer{};
+    PointSplattingRenderer _point_splatting_renderer{};
+    MarcherRenderer        _marcher_renderer{};
 
     ImGuiLayerContext const            *_imgui_ctx{nullptr};
     std::unique_ptr<RenderLayerContext> _render_ctx{nullptr};
@@ -85,15 +94,17 @@ private:
         _matrices_buffer->updateBuffer(_matrices);
         _matrices_buffer->unbind();
 
-        _model_buffer->bind();
-        _model_buffer->updateBuffer(_model);
-        _model_buffer->unbind();
-
         _camera_struct.position = glm::inverse(_matrices.view * _model.model) *
                                   glm::vec4(0, 0, 0, 1);
         _camera_buffer->bind();
         _camera_buffer->updateBuffer(_camera_struct);
         _camera_buffer->unbind();
+
+        _splat_struct.splat_normal =
+                glm::inverseTranspose(glm::mat3(_matrices.view * _model.model));
+        _splat_buffer->bind();
+        _splat_buffer->updateBuffer(_splat_struct);
+        _splat_buffer->unbind();
     }
 
 public:
@@ -102,7 +113,8 @@ public:
         _render_ctx = std::make_unique<RenderLayerContext>();
 
         _dft_renderer.init(_render_ctx.get());
-        _cpu_splatting_renderer.init(_render_ctx.get());
+        _point_splatting_renderer.init(_render_ctx.get());
+        _marcher_renderer.init(_render_ctx.get());
 
         _matrices_buffer = std::make_unique<OGLBuffer<MatricesStruct>>(
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
@@ -113,6 +125,11 @@ public:
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
                                      .index = 1},
                 _model);
+        _model.model =
+                glm::translate(_model.model, glm::vec3(-0.5, -0.5, -0.5));
+        _model_buffer->bind();
+        _model_buffer->updateBuffer(_model);
+        _model_buffer->unbind();
 
         _camera_buffer = std::make_unique<OGLBuffer<CameraStruct>>(
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
@@ -121,16 +138,31 @@ public:
         _camera_struct.ray_steps.x = 1.0f / DFT_X_DIM;
         _camera_struct.ray_steps.y = 1.0f / DFT_Y_DIM;
         _camera_struct.ray_steps.z = 1.0f / DFT_Z_DIM;
+
+        _splat_buffer = std::make_unique<OGLBuffer<SplatStruct>>(
+                OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
+                                     .index = 3},
+                _splat_struct);
+        _splat_struct.splat_size = 256.0f / 64.0f;
     }
 
     void update(float delta_t) noexcept {
         processInput(delta_t);
         updateUBO();
 
+        if (_imgui_ctx->is_wireframe) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        } else {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+
         if (_imgui_ctx->current_renderer == RendererType::DEFAULT) {
             _dft_renderer.update(delta_t);
+        } else if (_imgui_ctx->current_renderer ==
+                   RendererType::POINT_SPLATTING) {
+            _point_splatting_renderer.update(delta_t);
         } else {
-            _cpu_splatting_renderer.update(delta_t);
+            _marcher_renderer.update(delta_t);
         }
     }
 

@@ -30,7 +30,6 @@ struct OGLTextureDescription final {
     GLint      level{0};
     GLint      border{0};
     GLboolean  generate_mipmap{GL_FALSE};
-    GLboolean  flip_vertically{GL_FALSE};
 };
 
 class OGLTexture final : private NonCopyable {
@@ -67,7 +66,9 @@ public:
         : _description(description) {
         create_texture();
     };
-    ~OGLTexture() noexcept override { glDeleteTextures(1, &_texture_id); };
+    ~OGLTexture() noexcept override {
+        glDeleteTextures(1, &_texture_id);
+    };
 
     // implement move
     OGLTexture(OGLTexture &&other) noexcept

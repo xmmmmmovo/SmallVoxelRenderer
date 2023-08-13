@@ -59,11 +59,12 @@ public:
         }
     }
 
-    void draw() const noexcept {
+    void draw(GLenum const mode = GL_TRIANGLES, GLsizei count = -1) const noexcept {
+        if (count == -1) { count = _draw_count; }
         if (_is_indexed) {
-            glDrawElements(GL_TRIANGLES, _draw_count, GL_UNSIGNED_INT, nullptr);
+            glDrawElements(mode, count, GL_UNSIGNED_INT, nullptr);
         } else {
-            glDrawArrays(GL_TRIANGLES, 0, _draw_count);
+            glDrawArrays(mode, 0, count);
         }
     }
 

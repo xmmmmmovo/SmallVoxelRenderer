@@ -10,16 +10,17 @@
 
 namespace voxel {
 
-enum class RendererType { DEFAULT = 0, CPU_SPLATTING = 1 };
+enum class RendererType { DEFAULT = 0, POINT_SPLATTING = 1, MARCHER = 2 };
 
 struct ImGuiLayerContext final {
     ImGuiIO    *io{nullptr};
     ImGuiStyle *style{nullptr};
 
-    RendererType current_renderer{RendererType::CPU_SPLATTING};
+    RendererType current_renderer{RendererType::MARCHER};
 
     bool show_control_window{true};
     bool show_debug_window{false};
+    bool is_wireframe{false};
 };
 
 }// namespace voxel

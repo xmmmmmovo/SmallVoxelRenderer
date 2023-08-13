@@ -37,9 +37,10 @@ private:
         bind();
         std::size_t i = 0;
         for (auto &color_attachment : _description.color_attachments) {
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i++,
+            glFramebufferTexture2D(GL_FRAMEBUFFER, (GL_COLOR_ATTACHMENT0 + i),
                                    GL_TEXTURE_2D,
                                    color_attachment.getTextureID(), 0);
+            ++i;
         }
         if (_description.depth_stencil_attachment.has_value()) {
             glFramebufferRenderbuffer(
@@ -47,6 +48,10 @@ private:
                     GL_RENDERBUFFER,
                     _description.depth_stencil_attachment.value()
                             .getRenderBufferID());
+        }
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+            GL_FRAMEBUFFER_COMPLETE) {
+            spdlog::error("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
         }
         unbind();
     }

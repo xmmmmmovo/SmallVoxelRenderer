@@ -1,0 +1,14 @@
+//
+// Created by xmmmmmovo on 13/08/2023.
+//
+
+#ifndef VOXEL_RENDERER_READER_OBJECT_READER_HPP
+#define VOXEL_RENDERER_READER_OBJECT_READER_HPP
+
+namespace voxel {
+
+
+
+}
+
+#endif//VOXEL_RENDERER_READER_OBJECT_READER_HPP

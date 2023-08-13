@@ -33,15 +33,17 @@ public:
                 ImGui::Text("Choose the volume renderer:");
 
                 // combo box
-                static std::array<std::string_view, 2> items = {
-                        "Default", "CPU Splatting"};
-                if (ImGui::BeginCombo("Renderer",
-                                      items[static_cast<std::size_t>(
-                                                    _imgui_ctx->current_renderer)]
-                                              .data())) {
+                static std::array<std::string_view, 3> items = {
+                        "Default", "Point Splatting", "Marcher"};
+                if (ImGui::BeginCombo(
+                            "Renderer",
+                            items[static_cast<std::size_t>(
+                                          _imgui_ctx->current_renderer)]
+                                    .data())) {
                     for (int n = 0; n < items.size(); n++) {
-                        bool const is_selected = (_imgui_ctx->current_renderer ==
-                                                  static_cast<RendererType>(n));
+                        bool const is_selected =
+                                (_imgui_ctx->current_renderer ==
+                                 static_cast<RendererType>(n));
                         if (ImGui::Selectable(items[n].data(), is_selected)) {
                             _imgui_ctx->current_renderer =
                                     static_cast<RendererType>(n);
@@ -54,6 +56,8 @@ public:
                 if (ImGui::Button("Show Debug Window")) {
                     _imgui_ctx->show_debug_window = true;
                 }
+
+                ImGui::Checkbox("Wireframe", &_imgui_ctx->is_wireframe);
 
                 ImGui::End();
             }

@@ -25,6 +25,11 @@ struct CameraStruct final {
     glm::vec4 ray_steps{};
 };
 
+struct SplatStruct final {
+    glm::mat4 splat_normal{};
+    float     splat_size{};
+};
+
 }// namespace voxel
 
 #endif//VOXEL_RENDERER_GRAPHICS_RENDERER_UBUFFER_STRUCT_HPP

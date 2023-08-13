@@ -5,6 +5,8 @@
 #ifndef VOXEL_RENDERER_GRAPHICS_RENDERER_IRENDERER_HPP
 #define VOXEL_RENDERER_GRAPHICS_RENDERER_IRENDERER_HPP
 
+#include "marcher_frag_gl.h"
+#include "marcher_vert_gl.h"
 #include "quad_frag_gl.h"
 #include "quad_vert_gl.h"
 #include "raycaster_frag_gl.h"

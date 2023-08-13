@@ -17,6 +17,8 @@ struct RenderLayerContext {
     OGLShader          splat_frag_shader{};
     OGLShader          quad_vert_shader{};
     OGLShader          quad_frag_shader{};
+    OGLShader          marcher_vert_shader{};
+    OGLShader          marcher_frag_shader{};
     Image              _volume_image{};
 
     RenderLayerContext() {
@@ -33,6 +35,10 @@ struct RenderLayerContext {
                                               QUAD_VERT_GL);
         quad_frag_shader.initShaderFromSource(OGLShaderType::FRAGMENT,
                                               QUAD_FRAG_GL);
+        marcher_vert_shader.initShaderFromSource(OGLShaderType::VERTEX,
+                                                 MARCHER_VERT_GL);
+        marcher_frag_shader.initShaderFromSource(OGLShaderType::FRAGMENT,
+                                                 MARCHER_FRAG_GL);
     }
 };
 

@@ -7,7 +7,7 @@
 
 namespace voxel {
 
-class Image {
+class Image final {
 public:
     std::uint8_t *data{nullptr};
     int           width{0};
@@ -76,6 +76,7 @@ public:
     }
 };
 
+class MeshObj final {};
 
 }// namespace voxel
 

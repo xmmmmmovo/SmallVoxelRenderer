@@ -23,7 +23,6 @@ private:
     std::unique_ptr<OGLPipeline>   _main_pipeline{nullptr};
     std::unique_ptr<OGLRenderPass> _main_render_pass{nullptr};
 
-
     std::unique_ptr<OGLTexture> _volume_tex{nullptr};
 
     RenderLayerContext *_ctx;

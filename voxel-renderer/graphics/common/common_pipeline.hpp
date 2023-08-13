@@ -1,0 +1,16 @@
+//
+// Created by xmmmmmovo on 12/08/2023.
+//
+
+#ifndef VOXEL_RENDERER_GRAPHICS_COMMON_COMMON_PIPELINE_HPP
+#define VOXEL_RENDERER_GRAPHICS_COMMON_COMMON_PIPELINE_HPP
+
+namespace voxel {
+
+struct CommonPipeline final {
+
+};
+
+}
+
+#endif//VOXEL_RENDERER_GRAPHICS_COMMON_COMMON_PIPELINE_HPP
