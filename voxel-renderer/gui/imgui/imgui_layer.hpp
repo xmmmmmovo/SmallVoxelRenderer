@@ -30,11 +30,26 @@ public:
     void update(float /*delta_t*/) noexcept {
         if (_imgui_ctx->show_control_window) {
             if (ImGui::Begin("control panel", nullptr)) {
+                ImGui::Text("Device: %s", glGetString(GL_RENDERER));
+                ImGui::Text("OpenGL version: %s", glGetString(GL_VERSION));
+
+                ImGui::Separator();
+
+                ImGui::Text("Choose the data:");
+
+                static constexpr int LEN       = 1024;
+                static char          path[LEN] = "resources/data/Engine256.raw";
+                ImGui::InputText("path", path, LEN);
+                ImGui::SameLine();
+                if (ImGui::Button("Load")) { _imgui_ctx->volume_path = path; }
+
+                ImGui::Separator();
+
                 ImGui::Text("Choose the volume renderer:");
 
                 // combo box
-                static std::array<std::string_view, 3> items = {
-                        "Default", "Point Splatting", "Marcher"};
+                static std::array<std::string_view, 5> items = {
+                        "Default", "Point Splatting", "Marcher", "SVO", "VDB"};
                 if (ImGui::BeginCombo(
                             "Renderer",
                             items[static_cast<std::size_t>(
@@ -57,12 +72,18 @@ public:
                     _imgui_ctx->show_debug_window = true;
                 }
 
-                ImGui::Checkbox("Wireframe", &_imgui_ctx->is_wireframe);
+                if (_imgui_ctx->current_renderer == RendererType::MARCHER) {
+                    ImGui::Checkbox("Wireframe", &_imgui_ctx->is_wireframe);
+                }
+
+                if (_imgui_ctx->current_renderer == RendererType::SVO ||
+                    _imgui_ctx->current_renderer == RendererType::VDB) {
+                    ImGui::Text("Octree Level: %d", 10);
+                }
 
                 ImGui::End();
             }
         }
-        //        ImGui::ShowDemoWindow(nullptr);
 
         if (_imgui_ctx->show_debug_window) {
             ImGui::ShowMetricsWindow(&_imgui_ctx->show_debug_window);

@@ -23,6 +23,7 @@ struct RenderLayerContext {
 
     RenderLayerContext() {
         _volume_image = loadRaw(DEBUG_PATH "/resources/data/Engine256.raw");
+        //        _volume_image = loadRaw(DEBUG_PATH "/resources/data/Bonsai256.raw");
         ray_caster_vert_shader.initShaderFromSource(OGLShaderType::VERTEX,
                                                     RAYCASTER_VERT_GL);
         ray_caster_frag_shader.initShaderFromSource(OGLShaderType::FRAGMENT,

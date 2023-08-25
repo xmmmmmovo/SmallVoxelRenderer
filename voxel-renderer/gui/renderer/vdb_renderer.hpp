@@ -9,7 +9,7 @@
 
 namespace voxel {
 
-class VdbRenderer final : public IRenderer {
+class VDBRenderer final : public IRenderer {
 
 
 public:

@@ -10,13 +10,21 @@
 
 namespace voxel {
 
-enum class RendererType { DEFAULT = 0, POINT_SPLATTING = 1, MARCHER = 2 };
+enum class RendererType {
+    DEFAULT         = 0,
+    POINT_SPLATTING = 1,
+    MARCHER         = 2,
+    SVO             = 3,
+    VDB             = 4
+};
 
 struct ImGuiLayerContext final {
     ImGuiIO    *io{nullptr};
     ImGuiStyle *style{nullptr};
 
     RendererType current_renderer{RendererType::MARCHER};
+
+    std::filesystem::path volume_path{};
 
     bool show_control_window{true};
     bool show_debug_window{false};

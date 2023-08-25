@@ -11,6 +11,8 @@
 #include "gui/renderer/default_renderer.hpp"
 #include "gui/renderer/marcher_renderer.hpp"
 #include "gui/renderer/point_splatting_renderer.hpp"
+#include "gui/renderer/svo_renderer.hpp"
+#include "gui/renderer/vdb_renderer.hpp"
 #include "render_layer_ctx.hpp"
 
 #include <glm/gtc/matrix_inverse.hpp>
@@ -41,6 +43,8 @@ private:
     DefaultRenderer        _dft_renderer{};
     PointSplattingRenderer _point_splatting_renderer{};
     MarcherRenderer        _marcher_renderer{};
+    SVORenderer            _svo_renderer{};
+    VDBRenderer            _vdb_renderer{};
 
     ImGuiLayerContext const            *_imgui_ctx{nullptr};
     std::unique_ptr<RenderLayerContext> _render_ctx{nullptr};
@@ -115,6 +119,8 @@ public:
         _dft_renderer.init(_render_ctx.get());
         _point_splatting_renderer.init(_render_ctx.get());
         _marcher_renderer.init(_render_ctx.get());
+        _svo_renderer.init(_render_ctx.get());
+        _vdb_renderer.init(_render_ctx.get());
 
         _matrices_buffer = std::make_unique<OGLBuffer<MatricesStruct>>(
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
@@ -125,8 +131,6 @@ public:
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
                                      .index = 1},
                 _model);
-        _model.model =
-                glm::translate(_model.model, glm::vec3(-0.5, -0.5, -0.5));
         _model_buffer->bind();
         _model_buffer->updateBuffer(_model);
         _model_buffer->unbind();
@@ -161,8 +165,12 @@ public:
         } else if (_imgui_ctx->current_renderer ==
                    RendererType::POINT_SPLATTING) {
             _point_splatting_renderer.update(delta_t);
-        } else {
+        } else if (_imgui_ctx->current_renderer == RendererType::MARCHER) {
             _marcher_renderer.update(delta_t);
+        } else if (_imgui_ctx->current_renderer == RendererType::SVO) {
+            _svo_renderer.update(delta_t);
+        } else if (_imgui_ctx->current_renderer == RendererType::VDB) {
+            _vdb_renderer.update(delta_t);
         }
     }
 

@@ -6,6 +6,7 @@
 #define VOXEL_RENDERER_GRAPHICS_RENDERER_HPP
 
 #include "core/clock.hpp"
+#include "core/config.hpp"
 #include "graphics/adapters/ogl_adapter.hpp"
 #include "gui/imgui/adapters/imgui_opengl_adapter.hpp"
 #include "gui/imgui/imgui_layer.hpp"
@@ -17,10 +18,6 @@
 #include <spdlog/spdlog.h>
 
 namespace voxel {
-
-constexpr std::string_view WINDOW_TITLE  = "Voxel VoxelRenderer";
-constexpr std::int32_t     WINDOW_WIDTH  = 1366;
-constexpr std::int32_t     WINDOW_HEIGHT = 768;
 
 class VoxelRenderer final {
 private:

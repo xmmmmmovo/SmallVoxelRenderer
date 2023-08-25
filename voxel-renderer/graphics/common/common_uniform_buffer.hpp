@@ -16,8 +16,7 @@ struct MatricesStruct final {
 };
 
 struct ModelStruct final {
-    glm::mat4 model{glm::scale(glm::mat4(1.0f), glm::vec3(3.0f))};
-    //    glm::mat4 model{glm::mat4(1.0f)};
+    glm::mat4 model{glm::scale(glm::mat4(1.0f), glm::vec3(2.0f))};
 };
 
 struct CameraStruct final {

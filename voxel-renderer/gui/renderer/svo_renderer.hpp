@@ -6,13 +6,17 @@
 #define VOXEL_RENDERER_GUI_RENDERER_SVO_RENDERER_HPP
 
 #include "i_renderer.hpp"
+#include "reader/do.hpp"
+#include "reader/object_reader.hpp"
 
 namespace voxel {
 
-class SvoRenderer final : public IRenderer {
+class SVORenderer final : public IRenderer {
+    MeshObj mesh_obj{};
 
 public:
     void init(RenderLayerContext *ctx) noexcept override {}
+
     void update(float delta_t) noexcept override {}
 };
 
