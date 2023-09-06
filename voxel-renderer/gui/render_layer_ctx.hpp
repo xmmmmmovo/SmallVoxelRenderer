@@ -19,7 +19,9 @@ struct RenderLayerContext {
     OGLShader          quad_frag_shader{};
     OGLShader          marcher_vert_shader{};
     OGLShader          marcher_frag_shader{};
-    Image              _volume_image{};
+
+    Image   _volume_image{};
+    MeshObj _mesh_obj{};
 
     RenderLayerContext() {
         _volume_image = loadRaw(DEBUG_PATH "/resources/data/Engine256.raw");

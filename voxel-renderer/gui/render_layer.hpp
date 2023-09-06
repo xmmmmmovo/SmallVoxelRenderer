@@ -13,6 +13,7 @@
 #include "gui/renderer/point_splatting_renderer.hpp"
 #include "gui/renderer/svo_renderer.hpp"
 #include "gui/renderer/vdb_renderer.hpp"
+#include "gui/renderer/voxelized_renderer.hpp"
 #include "render_layer_ctx.hpp"
 
 #include <glm/gtc/matrix_inverse.hpp>
@@ -43,6 +44,7 @@ private:
     DefaultRenderer        _dft_renderer{};
     PointSplattingRenderer _point_splatting_renderer{};
     MarcherRenderer        _marcher_renderer{};
+    VoxelizedRenderer      _voxelized_renderer{};
     SVORenderer            _svo_renderer{};
     VDBRenderer            _vdb_renderer{};
 

@@ -14,17 +14,28 @@ enum class RendererType {
     DEFAULT         = 0,
     POINT_SPLATTING = 1,
     MARCHER         = 2,
-    SVO             = 3,
-    VDB             = 4
+    VOXELIZED       = 3,
+    SVO             = 4,
+    VDB             = 5
 };
+
+enum class ASSET_TYPE {
+    RAW = 0,
+    OBJ = 1,
+};
+
+static constexpr std::array<std::string_view, 6> RENDERER_ITEMS = {
+        "Default", "Point Splatting", "Marcher", "Voxelized", "SVO", "VDB"};
 
 struct ImGuiLayerContext final {
     ImGuiIO    *io{nullptr};
     ImGuiStyle *style{nullptr};
 
-    RendererType current_renderer{RendererType::MARCHER};
+    RendererType current_renderer{RendererType::DEFAULT};
 
-    std::filesystem::path volume_path{};
+    bool                  is_loaded{false};
+    std::filesystem::path file_path{};
+    ASSET_TYPE            asset_type{ASSET_TYPE::RAW};
 
     bool show_control_window{true};
     bool show_debug_window{false};
