@@ -57,7 +57,7 @@ public:
                                       .generate_mipmap = GL_TRUE});
 
         _volume_tex->bind();
-        _volume_tex->uploadData(_ctx->_volume_image);
+        _volume_tex->uploadData(_ctx->_volume_image.value());
         _volume_tex->unbind();
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

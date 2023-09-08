@@ -6,8 +6,8 @@
 #define VOXEL_RENDERER_READER_RAW_READER_HPP
 
 #include "core/defines.hpp"
-#include "do.hpp"
 #include "os/file_service.hpp"
+#include "read_data_types.hpp"
 
 #include <cstddef>
 #include <cstdint>

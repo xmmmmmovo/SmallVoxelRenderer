@@ -36,7 +36,7 @@ private:
         if (index < 0) index = 0;
         if (index >= DFT_X_DIM * DFT_Y_DIM * DFT_Z_DIM)
             index = (DFT_X_DIM * DFT_Y_DIM * DFT_Z_DIM) - 1;
-        return _ctx->_volume_image.data[index];
+        return _ctx->_volume_image.value().data[index];
     }
 
     glm::vec3 GetNormal(const int x, const int y, const int z) {

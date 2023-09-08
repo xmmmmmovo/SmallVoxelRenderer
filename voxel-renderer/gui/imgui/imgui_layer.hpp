@@ -11,6 +11,7 @@
 #include "core/noncopyable.hpp"
 #include "imgui_ctx.hpp"
 #include "os/file.hpp"
+#include "voxelizer/config.hpp"
 
 namespace voxel {
 
@@ -37,24 +38,32 @@ public:
         ImGui::Text("Choose the data:");
 
         static constexpr int LEN = 1024;
-        static char path[LEN] = "../../resources/data/Engine256.raw";// NOLINT
+        static char path[LEN]    = "../../resources/data/bunny.obj";// NOLINT
         ImGui::InputText("path", path, LEN);
         ImGui::SameLine();
         if (ImGui::Button("Load")) {
-            _imgui_ctx->file_path = path;
-            _imgui_ctx->is_loaded = true;
+            _imgui_ctx->file_path        = path;
+            _imgui_ctx->is_file_selected = true;
+            _imgui_ctx->is_loaded        = false;
 
-            if (getLastExtension(_imgui_ctx->file_path) == ".raw") {
-                _imgui_ctx->asset_type = ASSET_TYPE::RAW;
-            } else if (getLastExtension(_imgui_ctx->file_path) == ".obj") {
-                _imgui_ctx->asset_type = ASSET_TYPE::OBJ;
+            std::string const ext = getLastExtension(_imgui_ctx->file_path);
+            if (ext == ".raw") {
+                _imgui_ctx->asset_type       = ASSET_TYPE::RAW;
+                _imgui_ctx->current_renderer = RendererType::DEFAULT;
+            } else if (ext == ".obj") {
+                _imgui_ctx->asset_type       = ASSET_TYPE::OBJ;
+                _imgui_ctx->current_renderer = RendererType::VOXELIZED;
+            } else if (ext == ".ply") {
+                _imgui_ctx->asset_type       = ASSET_TYPE::PLY;
+                _imgui_ctx->current_renderer = RendererType::VOXELIZED;
+            } else if (ext == ".vdb") {
+                _imgui_ctx->asset_type       = ASSET_TYPE::VDB;
+                _imgui_ctx->current_renderer = RendererType::VDB;
             }
         }
     }
 
     void buildRendererChooser() {
-
-
         ImGui::Text("Choose the volume renderer:");
 
         // combo box
@@ -94,10 +103,17 @@ public:
         if (_imgui_ctx->current_renderer == RendererType::MARCHER) {
             ImGui::Checkbox("Wireframe", &_imgui_ctx->is_wireframe);
         }
-
+        
         if (_imgui_ctx->current_renderer == RendererType::SVO ||
             _imgui_ctx->current_renderer == RendererType::VDB) {
-            ImGui::Text("Tree Level: %d", 10);
+            static ImGuiSliderFlags const kSliderFlags = ImGuiSliderFlags_None;
+            if (ImGui::InputInt("tree level", &_imgui_ctx->tree_level)) {
+                if (MAX_TREE_LEVEL < _imgui_ctx->tree_level) {
+                    _imgui_ctx->tree_level = MAX_TREE_LEVEL;
+                } else if (MIN_TREE_LEVEL > _imgui_ctx->tree_level) {
+                    _imgui_ctx->tree_level = MIN_TREE_LEVEL;
+                }
+            }
         }
     }
 
@@ -130,7 +146,7 @@ public:
 
     ~ImGuiLayer() noexcept override = default;
 
-    [[nodiscard]] ImGuiLayerContext const *getImGuiCtx() noexcept {
+    [[nodiscard]] ImGuiLayerContext *getImGuiCtx() noexcept {
         return _imgui_ctx.get();
     }
 };

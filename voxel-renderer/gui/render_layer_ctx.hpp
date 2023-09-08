@@ -20,12 +20,10 @@ struct RenderLayerContext {
     OGLShader          marcher_vert_shader{};
     OGLShader          marcher_frag_shader{};
 
-    Image   _volume_image{};
-    MeshObj _mesh_obj{};
+    std::optional<Image>   _volume_image{std::nullopt};
+    std::optional<Model> _mesh_obj{std::nullopt};
 
     RenderLayerContext() {
-        _volume_image = loadRaw(DEBUG_PATH "/resources/data/Engine256.raw");
-        //        _volume_image = loadRaw(DEBUG_PATH "/resources/data/Bonsai256.raw");
         ray_caster_vert_shader.initShaderFromSource(OGLShaderType::VERTEX,
                                                     RAYCASTER_VERT_GL);
         ray_caster_frag_shader.initShaderFromSource(OGLShaderType::FRAGMENT,

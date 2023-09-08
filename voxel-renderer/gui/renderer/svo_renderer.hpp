@@ -6,8 +6,8 @@
 #define VOXEL_RENDERER_GUI_RENDERER_SVO_RENDERER_HPP
 
 #include "i_renderer.hpp"
-#include "reader/do.hpp"
 #include "reader/object_reader.hpp"
+#include "reader/read_data_types.hpp"
 
 namespace voxel {
 

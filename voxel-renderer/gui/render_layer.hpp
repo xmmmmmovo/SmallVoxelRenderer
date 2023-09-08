@@ -44,11 +44,12 @@ private:
     DefaultRenderer        _dft_renderer{};
     PointSplattingRenderer _point_splatting_renderer{};
     MarcherRenderer        _marcher_renderer{};
+    // for obj
     VoxelizedRenderer      _voxelized_renderer{};
     SVORenderer            _svo_renderer{};
     VDBRenderer            _vdb_renderer{};
 
-    ImGuiLayerContext const            *_imgui_ctx{nullptr};
+    ImGuiLayerContext                  *_imgui_ctx{nullptr};
     std::unique_ptr<RenderLayerContext> _render_ctx{nullptr};
 
 private:
@@ -113,16 +114,26 @@ private:
         _splat_buffer->unbind();
     }
 
+    void initRenderer() {
+        if (_imgui_ctx->is_file_selected) {
+            if (_imgui_ctx->asset_type == ASSET_TYPE::RAW) {
+                _dft_renderer.init(_render_ctx.get());
+                _point_splatting_renderer.init(_render_ctx.get());
+                _marcher_renderer.init(_render_ctx.get());
+            } else if (_imgui_ctx->asset_type == ASSET_TYPE::OBJ) {
+                _voxelized_renderer.init(_render_ctx.get());
+                _svo_renderer.init(_render_ctx.get());
+                _vdb_renderer.init(_render_ctx.get());
+            }
+        }
+    }
+
 public:
-    void init(ImGuiLayerContext const *ctx) noexcept {
+    void init(ImGuiLayerContext *ctx) noexcept {
         _imgui_ctx  = ctx;
         _render_ctx = std::make_unique<RenderLayerContext>();
 
-        _dft_renderer.init(_render_ctx.get());
-        _point_splatting_renderer.init(_render_ctx.get());
-        _marcher_renderer.init(_render_ctx.get());
-        _svo_renderer.init(_render_ctx.get());
-        _vdb_renderer.init(_render_ctx.get());
+        initRenderer();
 
         _matrices_buffer = std::make_unique<OGLBuffer<MatricesStruct>>(
                 OGLBufferDescription{.type  = OGLBufferType::UNIFORM,
@@ -162,17 +173,42 @@ public:
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
 
-        if (_imgui_ctx->current_renderer == RendererType::DEFAULT) {
-            _dft_renderer.update(delta_t);
-        } else if (_imgui_ctx->current_renderer ==
-                   RendererType::POINT_SPLATTING) {
-            _point_splatting_renderer.update(delta_t);
-        } else if (_imgui_ctx->current_renderer == RendererType::MARCHER) {
-            _marcher_renderer.update(delta_t);
-        } else if (_imgui_ctx->current_renderer == RendererType::SVO) {
-            _svo_renderer.update(delta_t);
-        } else if (_imgui_ctx->current_renderer == RendererType::VDB) {
-            _vdb_renderer.update(delta_t);
+        if (_imgui_ctx->is_file_selected) {
+            if (!_imgui_ctx->is_loaded) {
+                // load at first
+                if (_imgui_ctx->asset_type == ASSET_TYPE::RAW) {
+                    _render_ctx->_volume_image = loadRaw(_imgui_ctx->file_path);
+                } else if (_imgui_ctx->asset_type == ASSET_TYPE::OBJ) {
+                }
+
+                // init renderer
+                initRenderer();
+
+                _imgui_ctx->is_loaded = true;
+            }
+
+            if (_imgui_ctx->is_loaded) {
+                switch (_imgui_ctx->current_renderer) {
+                    case RendererType::DEFAULT:
+                        _dft_renderer.update(delta_t);
+                        break;
+                    case RendererType::POINT_SPLATTING:
+                        _point_splatting_renderer.update(delta_t);
+                        break;
+                    case RendererType::MARCHER:
+                        _marcher_renderer.update(delta_t);
+                        break;
+                    case RendererType::VOXELIZED:
+                        _voxelized_renderer.update(delta_t);
+                        break;
+                    case RendererType::SVO:
+                        _svo_renderer.update(delta_t);
+                        break;
+                    case RendererType::VDB:
+                        _vdb_renderer.update(delta_t);
+                        break;
+                }
+            }
         }
     }
 

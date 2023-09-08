@@ -19,10 +19,7 @@ enum class RendererType {
     VDB             = 5
 };
 
-enum class ASSET_TYPE {
-    RAW = 0,
-    OBJ = 1,
-};
+enum class ASSET_TYPE { RAW = 0, OBJ = 1, PLY = 2, VDB = 3 };
 
 static constexpr std::array<std::string_view, 6> RENDERER_ITEMS = {
         "Default", "Point Splatting", "Marcher", "Voxelized", "SVO", "VDB"};
@@ -33,9 +30,11 @@ struct ImGuiLayerContext final {
 
     RendererType current_renderer{RendererType::DEFAULT};
 
-    bool                  is_loaded{false};
+    bool                  is_file_selected{false}, is_loaded{false};
     std::filesystem::path file_path{};
     ASSET_TYPE            asset_type{ASSET_TYPE::RAW};
+
+    std::int32_t tree_level{1};
 
     bool show_control_window{true};
     bool show_debug_window{false};

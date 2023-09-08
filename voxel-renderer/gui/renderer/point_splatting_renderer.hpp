@@ -62,7 +62,7 @@ private:
         if (index >= DFT_X_DIM * DFT_Y_DIM * DFT_Z_DIM) {
             index = (DFT_X_DIM * DFT_Y_DIM * DFT_Z_DIM) - 1;
         }
-        return _ctx->_volume_image.data[index];
+        return _ctx->_volume_image.value().data[index];
     }
 
     void sampleVoxel(std::int32_t const x, std::int32_t const y,

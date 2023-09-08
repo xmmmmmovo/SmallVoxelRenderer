@@ -80,21 +80,19 @@ struct Material final {
     glm::vec3 ambient{};
     glm::vec3 diffuse{};
     glm::vec3 specular{};
-    float     shininess{};
 };
 
 struct MeshObj final {
     std::vector<glm::vec3> vertices{};
     std::vector<glm::vec3> normals{};
-
-    std::size_t material_idx{0};
+    std::size_t            material_idx{0};
 };
 
 struct MeshGPU final {
     OGLVertexArray                                     vao{};
     std::unique_ptr<OGLBuffer<std::vector<glm::vec3>>> pos_buffer{nullptr};
     std::unique_ptr<OGLBuffer<std::vector<glm::vec3>>> normal_buffer{nullptr};
-    std::size_t                                        vertex_count{0};
+    std::size_t                                        index_count{0};
     std::size_t                                        material_idx{0};
 };
 
