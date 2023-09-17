@@ -20,7 +20,7 @@ struct RenderLayerContext {
     OGLShader          marcher_vert_shader{};
     OGLShader          marcher_frag_shader{};
 
-    std::optional<Image>   _volume_image{std::nullopt};
+    std::optional<Image> _volume_image{std::nullopt};
     std::optional<Model> _mesh_obj{std::nullopt};
 
     RenderLayerContext() {

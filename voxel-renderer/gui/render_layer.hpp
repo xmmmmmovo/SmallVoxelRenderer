@@ -176,9 +176,13 @@ public:
         if (_imgui_ctx->is_file_selected) {
             if (!_imgui_ctx->is_loaded) {
                 // load at first
+                _render_ctx->_volume_image.reset();
+                _render_ctx->_mesh_obj.reset();
+
                 if (_imgui_ctx->asset_type == ASSET_TYPE::RAW) {
                     _render_ctx->_volume_image = loadRaw(_imgui_ctx->file_path);
                 } else if (_imgui_ctx->asset_type == ASSET_TYPE::OBJ) {
+                    _render_ctx->_mesh_obj = loadObjFile(_imgui_ctx->file_path);
                 }
 
                 // init renderer

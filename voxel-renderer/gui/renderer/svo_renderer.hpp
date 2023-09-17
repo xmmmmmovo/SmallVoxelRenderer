@@ -12,7 +12,7 @@
 namespace voxel {
 
 class SVORenderer final : public IRenderer {
-    MeshObj mesh_obj{};
+    Mesh mesh_obj{};
 
 public:
     void init(RenderLayerContext *ctx) noexcept override {}

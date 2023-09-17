@@ -34,7 +34,10 @@ struct ImGuiLayerContext final {
     std::filesystem::path file_path{};
     ASSET_TYPE            asset_type{ASSET_TYPE::RAW};
 
-    std::int32_t tree_level{1};
+    static constexpr std::uint8_t DEFAULT_TREE_LEVEL{8};
+
+    std::int32_t tree_level{DEFAULT_TREE_LEVEL};
+    std::int32_t voxel_size{1 << DEFAULT_TREE_LEVEL};
 
     bool show_control_window{true};
     bool show_debug_window{false};

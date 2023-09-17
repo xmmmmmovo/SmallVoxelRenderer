@@ -80,12 +80,14 @@ struct Material final {
     glm::vec3 ambient{};
     glm::vec3 diffuse{};
     glm::vec3 specular{};
+    float     shininess{0.0f};
 };
 
-struct MeshObj final {
-    std::vector<glm::vec3> vertices{};
-    std::vector<glm::vec3> normals{};
-    std::size_t            material_idx{0};
+struct Mesh final {
+    std::vector<glm::vec3>     vertices{};
+    std::vector<glm::vec3>     normals{};
+    std::vector<std::uint32_t> indices{};
+    std::size_t                material_idx{0};
 };
 
 struct MeshGPU final {
@@ -97,7 +99,7 @@ struct MeshGPU final {
 };
 
 struct Model final {
-    std::vector<MeshObj>  meshes{};
+    std::vector<Mesh>  meshes{};
     std::vector<Material> materials{};
 };
 

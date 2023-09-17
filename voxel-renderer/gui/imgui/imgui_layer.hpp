@@ -38,7 +38,7 @@ public:
         ImGui::Text("Choose the data:");
 
         static constexpr int LEN = 1024;
-        static char path[LEN]    = "../../resources/data/bunny.obj";// NOLINT
+        static char path[LEN]    = "../../resources/model/bunny.obj";// NOLINT
         ImGui::InputText("path", path, LEN);
         ImGui::SameLine();
         if (ImGui::Button("Load")) {
@@ -103,17 +103,21 @@ public:
         if (_imgui_ctx->current_renderer == RendererType::MARCHER) {
             ImGui::Checkbox("Wireframe", &_imgui_ctx->is_wireframe);
         }
-        
-        if (_imgui_ctx->current_renderer == RendererType::SVO ||
+
+        if (_imgui_ctx->current_renderer == RendererType::VOXELIZED ||
+            _imgui_ctx->current_renderer == RendererType::SVO ||
             _imgui_ctx->current_renderer == RendererType::VDB) {
             static ImGuiSliderFlags const kSliderFlags = ImGuiSliderFlags_None;
+
             if (ImGui::InputInt("tree level", &_imgui_ctx->tree_level)) {
                 if (MAX_TREE_LEVEL < _imgui_ctx->tree_level) {
                     _imgui_ctx->tree_level = MAX_TREE_LEVEL;
                 } else if (MIN_TREE_LEVEL > _imgui_ctx->tree_level) {
                     _imgui_ctx->tree_level = MIN_TREE_LEVEL;
                 }
+                _imgui_ctx->voxel_size = 1 << _imgui_ctx->tree_level;
             }
+            ImGui::Text("voxel level: %d", _imgui_ctx->voxel_size);
         }
     }
 
