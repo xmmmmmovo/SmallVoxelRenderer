@@ -51,7 +51,7 @@ private:
 
     ImGuiLayerContext                  *_imgui_ctx{nullptr};
     std::unique_ptr<RenderLayerContext> _render_ctx{nullptr};
-
+    
 private:
     void processInput(float delta_t) {
         static InputSystem const &input{InputSystem::getInstance()};
